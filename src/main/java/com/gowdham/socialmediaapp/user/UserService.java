@@ -11,12 +11,12 @@ import java.util.function.Predicate;
 @Component
 public class UserService {
 
-    private static List<User> users = new ArrayList<>();
+    private static final List<User> users = new ArrayList<>();
 
     private static int idCounter = 0;
 
     static {
-        users.add(new User( ++idCounter, "Gowdham", LocalDate.now().minusYears(24)));
+        users.add(new User(++idCounter, "Gowdham", LocalDate.now().minusYears(24)));
         users.add(new User(++idCounter, "Geetha", LocalDate.now().minusYears(50)));
         users.add(new User(++idCounter, "Raghul", LocalDate.now().minusYears(26)));
     }
@@ -28,8 +28,8 @@ public class UserService {
 
     //Get a user from ID
     public User getUserFromID(Integer id) {
-//        Predicate<? super User> Predicate = user -> user.getId().equals(id);
-//        return users.stream().filter(Predicate).findFirst().get();
+        Predicate<? super User> Predicate = user -> user.getId().equals(id);
+        return users.stream().filter(Predicate).findFirst().orElse(null);
 
         //In the above lines, what we are actually doing is really sinple.
 
@@ -45,18 +45,25 @@ public class UserService {
 
         // We can also use for loop to get the user from users matching the id.
 
-        for (int i = 0; true; i++) {
-            if (Objects.equals(users.get(i).getId(), id)) {
-                return users.get(i);
-            }
-        }
+//        for (int i = 0; true; i++) {
+//            if (Objects.equals(users.get(i).getId(), id)) {
+//                return users.get(i);
+//            }
+//        }
     }
 
-    //Post an user
-    public User addUser(User user){
+    //Post a user
+    public User addUser(User user) {
         user.setId(++idCounter);
         users.add(user);
         return user;
     }
+
+    //Delete a User
+    public void deleteUserByID(Integer id) {
+        Predicate<? super User> Predicate = user -> user.getId().equals(id);
+        users.removeIf(Predicate);
+    }
+
 
 }
